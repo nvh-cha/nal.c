@@ -1,0 +1,36 @@
+#pragma once
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#include <stdbool.h>
+
+#define __LOG(color, level, fmt, ...) \
+  fprintf(stderr, color "[" level "] %s:%d (%s): " fmt "\033[0m\n", \
+      __FILE__, __LINE__, __func__, ##__VA_ARGS__)
+
+#define DEBUG(fmt, ...) __LOG("\033[1;90m", "DEBUG", fmt, ##__VA_ARGS__) //gray
+#define INFO(fmt, ...) __LOG("\033[1;32m", "INFO", fmt, ##__VA_ARGS__) //green
+#define WARN(fmt, ...) __LOG("\033[1;33m", "WARN", fmt, ##__VA_ARGS__) //yellow
+#define ERROR(fmt, ...) __LOG("\033[1;31m", "ERROR", fmt, ##__VA_ARGS__) //red
+#define FATAL(fmt, ...) do { __LOG("\033[1;31m", "FATAL", fmt, ##__VA_ARGS__); exit(1); } while (0) //red
+
+typedef uint64_t u64;
+typedef uint32_t u32;
+typedef uint16_t u16;
+typedef uint8_t   u8;
+typedef int64_t  i64;
+typedef int32_t  i32;
+typedef int16_t  i16;
+typedef int8_t    i8;
+typedef float    f32;
+typedef double   f64;
+typedef size_t usize;
+
+typedef struct { f32 x; f32 y; } vec2f;
+typedef struct { i32 x; i32 y; } vec2i;
+typedef struct { u32 x; u32 y; } vec2u;
+
+typedef vec2f vec2;
+
+//TODO: vector math
