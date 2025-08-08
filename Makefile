@@ -1,8 +1,8 @@
 SRC := $(wildcard src/*.c)
-OUT := ./bin/nel.exe
+OUT := ./bin/nal.exe
 
 CC := gcc
-CFLAGS := -Wall -Wextra -std=c99 -Iinclude -Iexeternal
+CFLAGS := -Wall -Wextra -std=c99 -Iinclude -Iexternal
 LDFLAGS := -Llib -lSDL2main -lSDL2
 
 all: build run

@@ -1,15 +1,20 @@
 #include <core.h>
-#include "_get_fn_.h"
+#include "__global__.h"
 
 static SDL_Window* sdl_win;
 static SDL_Renderer* sdl_renderer;
 static SDL_Texture* sdl_texture;
 static Texture buffer;
+static vec2u window_size;
+static f32 time_delta;
+static f32 time_target = 0;
+static f32 time_last;
+static f32 time_start;
 
 SDL_Window *_sdl_getwin(void) { return sdl_win; }
 SDL_Renderer *_sdl_getrenderer(void) { return sdl_renderer; }
 SDL_Texture *_sdl_gettexture(void) { return sdl_texture; }
-Texture _get_buffer(void) { return buffer; }
+Texture *_get_buffer(void) { return &buffer; }
 
 WindowOptions windowoptions_default(void) {
   return (WindowOptions){
@@ -39,6 +44,14 @@ static u32 windowoptions_load(WindowOptions opt) {
   return flags;
 }
 
+void time_set_target(f32 target) {
+  time_target = 1000.0 / target;
+}
+
+f32 time_get_delta(void) {
+  return time_delta;
+}
+
 void window_create(char *title, vec2u size, vec2u buffer_size) {
   WindowOptions opt = windowoptions_default();
   opt.title = title;
@@ -66,6 +79,45 @@ void window_createx(WindowOptions options) {
 
   INFO("created window and buffer successfully");
   INFO("buffer: %ix%i", buffer.size.x, buffer.size.y);
+
+  if (time_target == 0) {
+    time_target = 1000.0 / 60.0;
+    INFO("no target fps specified, auto-setting to 60 fps");
+  }
+  time_delta = 0.0;
+  time_last = SDL_GetTicks();
+}
+
+void window_update(void) {
+  time_start = SDL_GetTicks();
+  _input_update();
+}
+void window_updatelate(void) {
+  window_size = (vec2u){0, 0};
+  SDL_GetWindowSize(sdl_win, &window_size.x, &window_size.y);
+
+  f32 sx = (f32)window_size.x / (f32)buffer.size.x;
+  f32 sy = (f32)window_size.y / (f32)buffer.size.y;
+  f32 scale = (sx < sy) ? sx : sy;
+
+  SDL_Rect dst = {
+    (window_size.x-buffer.size.x*scale)/2,
+    (window_size.y-buffer.size.y*scale)/2,
+    buffer.size.x*scale, buffer.size.y*scale
+  };
+
+  SDL_UpdateTexture(sdl_texture, NULL, buffer.data, buffer.size.x*sizeof(Color));
+  SDL_RenderClear(sdl_renderer);
+  SDL_RenderCopy(sdl_renderer, sdl_texture, NULL, &dst);
+  SDL_RenderPresent(sdl_renderer);
+
+  u32 frame_time = SDL_GetTicks() - time_start;
+  if (frame_time < time_target)
+    SDL_Delay(time_target - frame_time);
+
+  u32 current_time = SDL_GetTicks();
+  time_delta = (current_time - time_last) / 1000.0f;
+  time_last = current_time;
 }
 
 void window_destroy(void) {
@@ -79,5 +131,6 @@ void window_destroy(void) {
   sdl_win = NULL;
 
   SDL_Quit();
-} 
+}
+
 
