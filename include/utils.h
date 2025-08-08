@@ -33,4 +33,12 @@ typedef struct { u32 x; u32 y; } vec2u;
 
 typedef vec2f vec2;
 
-//TODO: vector math
+#define __VEC2OP__(T) \
+  vec2##T vec##T##_add(vec2##T a, vec2##T b); \
+  vec2##T vec##T##_sub(vec2##T a, vec2##T b); \
+  vec2##T vec##T##_mul(vec2##T a, vec2##T b); \
+  vec2##T vec##T##_div(vec2##T a, vec2##T b); \
+
+__VEC2OP__(f);
+__VEC2OP__(i);
+__VEC2OP__(u);

@@ -21,3 +21,6 @@ void window_createx(WindowOptions options);
 void window_update(void);
 void window_updatelate(void);
 void window_destroy(void);
+
+void time_set_target(f32 target);
+f32 time_get_delta(void);

@@ -1,0 +1,4 @@
+bin/nal.exe
+compile_commands.json
+generate_compile_commands.py
+.cache
