@@ -5,6 +5,9 @@
 
 typedef u32 Color;
 
+Color color_pack(u8 a, u8 r, u8 g, u8 b);
+void color_unpack(Color c, u8 *a, u8 *r, u8 *g, u8 *b);
+
 #define COLOR_RED 0xffff0000
 #define COLOR_GREEN 0xff00ff00
 #define COLOR_BLUE 0xff0000ff
@@ -18,6 +21,16 @@ typedef struct {
   Color *data;
   vec2u size;
 } Texture;
+
+Texture texture_load(const char *path);
+Texture texture_copy(Texture t);
+void texture_replacecolor(Texture *t, Color from, Color to);
+void texture_flipx(Texture *t);
+void texture_flipy(Texture *t);
+void texture_cut(Texture *t, vec2u pos, vec2u size); // consumes the initial texture
+void texture_scale(Texture *t, f32 a);
+void texture_scalex(Texture *t, vec2u size);
+void texture_free(Texture *t);
 
 void render_changetarget(Texture *render_target);
 void render_clear(Color color);

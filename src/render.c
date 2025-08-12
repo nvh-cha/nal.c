@@ -1,5 +1,17 @@
+#include <math.h>
 #include <render.h>
 #include "__global__.h"
+
+Color color_pack(u8 a, u8 r, u8 g, u8 b) {
+  return ((u32)a << 24) | ((u32)r << 16) | ((u32)g << 8) | ((u32)b);
+}
+
+void color_unpack(Color c, u8 *a, u8 *r, u8 *g, u8 *b) {
+  *a = (c >> 24) & 0xff;
+  *r = (c >> 16) & 0xff;
+  *g = (c >> 8)  & 0xff;
+  *b = c         & 0xff;
+}
 
 static Texture *target;
 
@@ -35,7 +47,7 @@ void render_line(vec2 start, vec2 end, Color color) {
   f32 dx = end.x - start.x;
   f32 dy = end.y - start.y;
 
-  i32 steps = (i32)fmax(fabs(dx), fabs(dy));
+  u32 steps = (i32)fmax(fabs(dx), fabs(dy));
 
   f32 x_inc = dx / steps;
   f32 y_inc = dy / steps;
