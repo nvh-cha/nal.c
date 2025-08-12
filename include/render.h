@@ -32,6 +32,20 @@ void texture_scale(Texture *t, f32 a);
 void texture_scalex(Texture *t, vec2u size);
 void texture_free(Texture *t);
 
+typedef struct {
+  Texture *images;
+  u32 len;
+} Spritesheet;
+
+Spritesheet spritesheet_load(const char *path);
+Spritesheet spritesheet_loadx(const char *path, vec2u sprite_size);
+Texture spritesheet_get(Spritesheet s, u32 i);
+void spritesheet_free(Spritesheet s);
+
+typedef struct {
+
+} Animation;
+
 void render_changetarget(Texture *render_target);
 void render_clear(Color color);
 
@@ -39,3 +53,4 @@ void render_pixel(vec2 pos, Color color);
 void render_rectangle(vec2 pos, vec2 size, Color color);
 void render_line(vec2 start, vec2 end, Color color);
 void render_texture(Texture image, vec2 pos);
+void render_spritesheet(Spritesheet spr);

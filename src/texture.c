@@ -99,3 +99,50 @@ void texture_free(Texture *t) {
   free(t->data);
   t->data = NULL;
 }
+
+Spritesheet spritesheet_load(const char *path) {
+  Texture atlas = texture_load(path);
+
+  vec2u sprite_size = (vec2u){0};
+  Color delimiter = atlas.data[0];
+  sprite_size.x++;
+  while (atlas.data[sprite_size.x] != delimiter)
+    sprite_size.x++;
+  sprite_size.x--;
+
+  sprite_size.y++;
+  while (atlas.data[sprite_size.y*atlas.size.x] != delimiter)
+    sprite_size.y++;
+  sprite_size.y--;
+
+  texture_free(&atlas);
+
+  return spritesheet_loadx(path, sprite_size);
+}
+Spritesheet spritesheet_loadx(const char *path, vec2u sprite_size) {
+  Spritesheet res;
+  Texture atlas = texture_load(path);
+
+  res.len = ((atlas.size.x/sprite_size.x)*(atlas.size.y/sprite_size.y));
+  res.images = malloc(sizeof(Texture)*res.len);
+
+  for (u32 y=0;y<atlas.size.y/sprite_size.y;y++) {
+    for (u32 x=0;x<atlas.size.x/sprite_size.x;x++) {
+      Texture t = texture_copy(atlas);
+      texture_cut(&t, (vec2u){x*sprite_size.x+(x+1), y*sprite_size.y+(y+1)}, sprite_size);
+      res.images[y*(atlas.size.x/sprite_size.x)+x] = t;
+    }
+  }
+  
+  texture_free(&atlas);
+  return res;
+}
+Texture spritesheet_get(Spritesheet s, u32 i) {
+  if (i >= s.len)
+    FATAL("index out of bounds: %i", i);
+  return s.images[i];
+}
+void spritesheet_free(Spritesheet s) {
+  for (u32 i=0;i<s.len;i++)
+    free(s.images[i].data);
+}
