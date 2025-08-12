@@ -20,6 +20,7 @@ void window_create(char *title, vec2u size, vec2u buffer_size);
 void window_createx(WindowOptions options);
 void window_update(void);
 void window_updatelate(void);
+bool window_shouldclose(void);
 void window_destroy(void);
 
 void time_set_target(f32 target);

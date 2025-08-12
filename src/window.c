@@ -10,11 +10,14 @@ static f32 time_delta;
 static f32 time_target = 0;
 static f32 time_last;
 static f32 time_start;
+static bool running = 0;
 
 SDL_Window *_sdl_getwin(void) { return sdl_win; }
 SDL_Renderer *_sdl_getrenderer(void) { return sdl_renderer; }
 SDL_Texture *_sdl_gettexture(void) { return sdl_texture; }
 Texture *_get_buffer(void) { return &buffer; }
+bool *_get_running(void) { return &running; }
+vec2u _get_windowsize(void) { return window_size; }
 
 WindowOptions windowoptions_default(void) {
   return (WindowOptions){
@@ -60,6 +63,9 @@ void window_create(char *title, vec2u size, vec2u buffer_size) {
   window_createx(opt);
 }
 void window_createx(WindowOptions options) {
+  running = true;
+  window_size = options.size;
+
   SDL_Init(SDL_INIT_VIDEO);
   u32 flags = windowoptions_load(options);
   sdl_win = SDL_CreateWindow(options.title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -93,7 +99,6 @@ void window_update(void) {
   _input_update();
 }
 void window_updatelate(void) {
-  window_size = (vec2u){0, 0};
   SDL_GetWindowSize(sdl_win, &window_size.x, &window_size.y);
 
   f32 sx = (f32)window_size.x / (f32)buffer.size.x;
@@ -118,6 +123,12 @@ void window_updatelate(void) {
   u32 current_time = SDL_GetTicks();
   time_delta = (current_time - time_last) / 1000.0f;
   time_last = current_time;
+
+  _input_updatelate();
+}
+
+bool window_shouldclose(void) {
+  return !running;
 }
 
 void window_destroy(void) {

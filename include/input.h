@@ -160,3 +160,19 @@ typedef enum {
 bool input_pressed(Key k);
 bool input_released(Key k);
 bool input_down(Key k);
+
+typedef enum {
+  MOUSE_LEFT,
+  MOUSE_RIGHT,
+  MOUSE_MIDDLE,
+  MOUSE_BUTTON4,
+  MOUSE_BUTTON5,
+  MOUSE_COUNT
+} MouseButton;
+
+vec2u mouse_posw(void);
+vec2u mouse_pos(void);
+bool mouse_down(MouseButton btn);
+bool mouse_pressed(MouseButton btn);
+bool mouse_released(MouseButton btn);
+i32 mouse_scroll(void);
