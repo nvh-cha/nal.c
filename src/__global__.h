@@ -13,3 +13,4 @@ bool *_get_running(void);
 
 void _input_update(void);
 void _input_updatelate(void);
+void _audio_init(void);

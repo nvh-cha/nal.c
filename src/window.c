@@ -66,6 +66,8 @@ void window_createx(WindowOptions options) {
   running = true;
   window_size = options.size;
 
+  _audio_init();
+
   SDL_Init(SDL_INIT_VIDEO);
   u32 flags = windowoptions_load(options);
   sdl_win = SDL_CreateWindow(options.title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
