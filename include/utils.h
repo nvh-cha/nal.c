@@ -33,11 +33,18 @@ typedef struct { u32 x; u32 y; } vec2u;
 
 typedef vec2f vec2;
 
+vec2f vec2u_tof(vec2u v);
+vec2f vec2i_tof(vec2i v);
+vec2u vec2f_tou(vec2f v);
+vec2u vec2i_tou(vec2i v);
+vec2i vec2f_toi(vec2f v);
+vec2i vec2u_toi(vec2u v);
+
 #define __VEC2OP__(T) \
-  vec2##T vec##T##_add(vec2##T a, vec2##T b); \
-  vec2##T vec##T##_sub(vec2##T a, vec2##T b); \
-  vec2##T vec##T##_mul(vec2##T a, vec2##T b); \
-  vec2##T vec##T##_div(vec2##T a, vec2##T b); \
+  vec2##T vec2##T##_add(vec2##T a, vec2##T b); \
+  vec2##T vec2##T##_sub(vec2##T a, vec2##T b); \
+  vec2##T vec2##T##_mul(vec2##T a, vec2##T b); \
+  vec2##T vec2##T##_div(vec2##T a, vec2##T b); \
 
 __VEC2OP__(f);
 __VEC2OP__(i);

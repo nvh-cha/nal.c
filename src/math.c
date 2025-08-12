@@ -17,3 +17,10 @@
 __VEC2OP_IMPL__(f);
 __VEC2OP_IMPL__(u);
 __VEC2OP_IMPL__(i);
+
+vec2f vec2u_tof(vec2u v) { return (vec2f){(f32)v.x, (f32)v.y }; } 
+vec2f vec2i_tof(vec2i v) { return (vec2f){(f32)v.x, (f32)v.y }; } 
+vec2u vec2f_tou(vec2f v) { return (vec2u){(u32)v.x, (u32)v.y }; } 
+vec2u vec2i_tou(vec2i v) { return (vec2u){(u32)v.x, (u32)v.y }; } 
+vec2i vec2f_toi(vec2f v) { return (vec2i){(i32)v.x, (i32)v.y }; } 
+vec2i vec2u_toi(vec2u v) { return (vec2i){(i32)v.x, (i32)v.y }; } 
