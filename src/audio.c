@@ -19,6 +19,8 @@ void sound_load(Sound *s, const char *path) {
   *s = Mix_LoadWAV(path);
   if (!*s)
     FATAL("failed to load sound: %s", path);
+
+  INFO("loaded sound: %s", path);
 }
 void sound_play(Sound *s) {
   Mix_PlayChannel(-1, *s, 0);
@@ -28,6 +30,8 @@ void music_load(Music *m, const char *path) {
   *m = Mix_LoadMUS(path);
   if (!*m)
     FATAL("failed to load music: %s", path);
+
+  INFO("loaded sound: %s", path);
 }
 void music_play(Music *m) {
   Mix_PlayMusic(*m, -1);

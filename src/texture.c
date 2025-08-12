@@ -23,6 +23,9 @@ Texture texture_load(const char *path) {
   }
 
   stbi_image_free(image_data);
+  
+  INFO("loaded texture: %s %ix%i", path, w, h);
+
   return res;
 }
 Texture texture_copy(Texture t) {
@@ -98,6 +101,8 @@ void texture_scalex(Texture *t, vec2u size) {
 void texture_free(Texture *t) {
   free(t->data);
   t->data = NULL;
+
+  INFO("unloaded texture %ix%i", t->size.x, t->size.y);
 }
 
 Spritesheet spritesheet_load(const char *path) {
@@ -135,6 +140,8 @@ Spritesheet spritesheet_loadx(const char *path, vec2u sprite_size) {
   }
   
   texture_free(&atlas);
+
+  INFO("loaded spritesheet: %s with sprite size: %ix%i", path, sprite_size.x, sprite_size.y);
   return res;
 }
 Texture spritesheet_get(Spritesheet s, u32 i) {
@@ -145,4 +152,6 @@ Texture spritesheet_get(Spritesheet s, u32 i) {
 void spritesheet_free(Spritesheet s) {
   for (u32 i=0;i<s.len;i++)
     free(s.images[i].data);
+
+  INFO("unloaded spritesheet");
 }

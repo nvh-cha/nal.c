@@ -144,6 +144,8 @@ void window_destroy(void) {
   sdl_win = NULL;
 
   SDL_Quit();
+
+  INFO("closed window");
 }
 
 
