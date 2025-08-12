@@ -23,3 +23,16 @@ void sound_load(Sound *s, const char *path) {
 void sound_play(Sound *s) {
   Mix_PlayChannel(-1, *s, 0);
 }
+
+void music_load(Music *m, const char *path) {
+  *m = Mix_LoadMUS(path);
+  if (!*m)
+    FATAL("failed to load music: %s", path);
+}
+void music_play(Music *m) {
+  Mix_PlayMusic(*m, -1);
+}
+
+void audio_volume(u32 volume) {
+  Mix_Volume(-1, volume);
+}
