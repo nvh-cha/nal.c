@@ -47,11 +47,11 @@ static u32 windowoptions_load(WindowOptions opt) {
   return flags;
 }
 
-void time_set_target(f32 target) {
+void time_settarget(f32 target) {
   time_target = 1000.0 / target;
 }
 
-f32 time_get_delta(void) {
+f32 time_getdelta(void) {
   return time_delta;
 }
 

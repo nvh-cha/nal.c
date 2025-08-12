@@ -23,5 +23,5 @@ void window_updatelate(void);
 bool window_shouldclose(void);
 void window_destroy(void);
 
-void time_set_target(f32 target);
-f32 time_get_delta(void);
+void time_settarget(f32 target);
+f32 time_getdelta(void);

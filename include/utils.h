@@ -49,3 +49,26 @@ vec2i vec2u_toi(vec2u v);
 __VEC2OP__(f);
 __VEC2OP__(i);
 __VEC2OP__(u);
+
+typedef struct {
+  void *items;
+  usize capacity;
+  usize len;
+  usize item_size;
+} ArrayList;
+
+ArrayList *arraylist_create(usize item_size, usize initial_capacity);
+usize arraylist_append(ArrayList *arr, void *item);
+void *arraylist_get(ArrayList *arr, usize index);
+u8 arraylist_remove(ArrayList *arr, usize index);
+
+typedef struct {
+  f32 i;
+  bool end;
+  bool ended_once;
+  bool repeat;
+  f32 time;
+} Timer;
+
+Timer timer_create(f32 time, bool repeat);
+void timer_update(Timer *t);
