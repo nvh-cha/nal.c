@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include <utils.h>
@@ -12,3 +13,4 @@ void music_load(Music *m, const char *path);
 void music_play(Music *m);
 
 void audio_volume(u32 volume);
+*/

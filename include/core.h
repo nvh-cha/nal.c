@@ -6,13 +6,9 @@ typedef struct {
   char *title;
   vec2u size;
   vec2u buffer_size;
-  bool full_screen;
-  bool hidden;
   bool borderless;
   bool resizable;
-  bool minimized;
-  bool maximized;
-  bool input_grabbed;
+  bool hidden;
 } WindowOptions;
 WindowOptions windowoptions_default(void);
 

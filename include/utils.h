@@ -12,7 +12,7 @@
 #define DEBUG(fmt, ...) __LOG("\033[1;90m", "DEBUG", fmt, ##__VA_ARGS__) //gray
 #define INFO(fmt, ...) __LOG("\033[1;32m", "INFO", fmt, ##__VA_ARGS__) //green
 #define WARN(fmt, ...) __LOG("\033[1;33m", "WARN", fmt, ##__VA_ARGS__) //yellow
-#define ERROR(fmt, ...) __LOG("\033[1;31m", "ERROR", fmt, ##__VA_ARGS__) //red
+#define ERRORL(fmt, ...) __LOG("\033[1;31m", "ERROR", fmt, ##__VA_ARGS__) //red
 #define FATAL(fmt, ...) do { __LOG("\033[1;31m", "FATAL", fmt, ##__VA_ARGS__); exit(1); } while (0) //red
 
 typedef uint64_t u64;

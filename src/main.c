@@ -1,23 +1,32 @@
 #include <nal.h>
-#include <SDL2/SDL_mixer.h>
-
-//TODO WRITE A BUNCH OF INFO
 
 int main(int argc, char *argv[]) {
   WindowOptions opt = windowoptions_default();
   window_createx(opt);
 
   Spritesheet spr = spritesheet_load("data/test.png");
-  u32 i = 0;
+  u32 i = 2;
 
   while(!window_shouldclose()) {
     window_update();
 
     render_changetarget(NULL);
-    render_clear(0xff000000);
+    render_clear(COLOR_GREEN);
 
     if (input_pressed(KEY_SPACE))
-      i++;
+      DEBUG("SPACE");
+
+    if (mouse_pressed(MOUSE_LEFT))
+      DEBUG("LEFT");
+    if (mouse_pressed(MOUSE_RIGHT))
+      DEBUG("RIGHT");
+    if (mouse_pressed(MOUSE_MIDDLE))
+      DEBUG("middle");
+    if (mouse_pressed(MOUSE_BUTTON4))
+      DEBUG("4");
+    if (mouse_pressed(MOUSE_BUTTON5))
+      DEBUG("5");
+
     render_texture(spritesheet_get(spr, i), (vec2){0});
 
     window_updatelate();

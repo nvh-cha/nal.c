@@ -5,7 +5,7 @@
 ArrayList *arraylist_create(usize item_size, usize initial_capacity) {
 	ArrayList *arr = malloc(sizeof(ArrayList));
 	if (!arr) {
-		ERROR("failed to allocate memory for the arraylist");
+		ERRORL("failed to allocate memory for the arraylist");
     return NULL;
   }
 	arr->item_size = item_size;
@@ -13,7 +13,7 @@ ArrayList *arraylist_create(usize item_size, usize initial_capacity) {
 	arr->len = 0;
 	arr->items = malloc(item_size*arr->capacity);
 	if (!arr->items) {
-		ERROR("failed to allocate memory for arraylist");
+		ERRORL("failed to allocate memory for arraylist");
     return NULL;
   }
 	return arr;
@@ -24,7 +24,7 @@ usize arraylist_append(ArrayList *arr, void *item) {
 		arr->capacity = arr->capacity > 0 ? arr->capacity*2 : 1;
 		void *items = realloc(arr->items, arr->item_size*arr->capacity);
 		if (!items) {
-      ERROR("failed to realloc memory for arraylist");
+      ERRORL("failed to realloc memory for arraylist");
       return -1;
     }
 		arr->items = items;
@@ -36,7 +36,7 @@ usize arraylist_append(ArrayList *arr, void *item) {
 
 void *arraylist_get(ArrayList *arr, usize index) {
 	if (index >= arr->len) {
-		ERROR("index out of bounds");
+		ERRORL("index out of bounds");
     return NULL;
   }
 	return arr->items+index*arr->item_size;
@@ -44,11 +44,11 @@ void *arraylist_get(ArrayList *arr, usize index) {
 
 u8 arraylist_remove(ArrayList *arr, usize index) {
 	if (arr->len == 0) {
-    ERROR("list is empty\n");
+    ERRORL("list is empty\n");
     return 1;
   }
 	if (index >= arr->len) {
-    ERROR("index out of bounds\n");
+    ERRORL("index out of bounds\n");
     return 1;
   }
 

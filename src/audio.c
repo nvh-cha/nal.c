@@ -1,3 +1,5 @@
+/*
+
 #include <audio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -40,3 +42,5 @@ void music_play(Music *m) {
 void audio_volume(u32 volume) {
   Mix_Volume(-1, volume);
 }
+
+*/
