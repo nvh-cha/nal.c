@@ -3,7 +3,7 @@ OUT := ./bin/nal.exe
 
 CC := gcc
 CFLAGS := -Wall -Wextra -std=c99 -Iinclude -Iexternal
-LDFLAGS := -Llib -lSDL2main -lSDL2 -lSDL2_mixer
+LDFLAGS := -lgdi32 -luser32 -lwinmm
 
 all: build run
 
