@@ -155,3 +155,15 @@ void spritesheet_free(Spritesheet s) {
 
   INFO("unloaded spritesheet");
 }
+Animation animation_create(char *path, f32 delay, bool repeat) {
+  Animation res;
+  res.timer = timer_create(delay, 1);
+  res.repeat = repeat;
+  res.images = spritesheet_load(path);
+  res.i = 0;
+
+  return res;
+}
+void animation_free(Animation *ani) {
+  spritesheet_free(ani->images);
+}

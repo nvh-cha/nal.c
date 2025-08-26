@@ -43,8 +43,14 @@ Texture spritesheet_get(Spritesheet s, u32 i);
 void spritesheet_free(Spritesheet s);
 
 typedef struct {
-
+  Spritesheet images;
+  u32 i;
+  Timer timer;
+  bool repeat;
 } Animation;
+
+Animation animation_create(char *path, f32 delay, bool repeat);
+void animation_free(Animation *ani);
 
 void render_changetarget(Texture *render_target);
 void render_clear(Color color);
@@ -53,4 +59,4 @@ void render_pixel(vec2 pos, Color color);
 void render_rectangle(vec2 pos, vec2 size, Color color);
 void render_line(vec2 start, vec2 end, Color color);
 void render_texture(Texture image, vec2 pos);
-void render_spritesheet(Spritesheet spr);
+void render_animation(Animation *ani, vec2 pos);

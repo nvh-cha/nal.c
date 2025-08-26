@@ -69,3 +69,20 @@ void render_texture(Texture image, vec2 pos) {
     }
   }
 }
+
+void render_animation(Animation *ani, vec2 pos) {
+  timer_update(&ani->timer);
+
+  if (ani->timer.end) {
+    ani->i++;
+    if ((ani->i == ani->images.len) && ani->repeat)
+      ani->i = 0;
+    else if ((ani->i == ani->images.len) && !ani->repeat)
+      ani->i = ani->images.len - 1;
+  }
+
+  render_texture(
+    spritesheet_get(ani->images, ani->i),
+    pos
+  );
+}
