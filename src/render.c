@@ -31,7 +31,9 @@ void render_changetarget(Texture *render_target) {
 void render_pixel(vec2 pos, Color color) {
   if (pos.x >= 0 && pos.x < target->size.x &&
       pos.y >= 0 && pos.y < target->size.y) {
-    target->data[(u32)(pos.x+pos.y*target->size.x)] = color;
+    int x = (int)pos.x;
+    int y = (int)pos.y;
+    target->data[y * target->size.x + x] = color;
   }
 }
 

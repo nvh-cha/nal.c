@@ -19,6 +19,8 @@ static f32 time_delta;
 static f32 time_target = 0;
 static f32 time_last;
 static f32 time_start;
+static LARGE_INTEGER qpc_freq;
+static LARGE_INTEGER qpc_last;
 static bool running = false;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -76,6 +78,9 @@ void window_create(char *title, vec2u size, vec2u buffer_size) {
 }
 
 void window_createx(WindowOptions options) {
+  QueryPerformanceFrequency(&qpc_freq);
+  QueryPerformanceCounter(&qpc_last);
+
   running = true;
   window_size = options.size;
 
@@ -135,13 +140,10 @@ void window_createx(WindowOptions options) {
   }
 
   time_delta = 0.0f;
-  time_last = (f32)GetTickCount();
   INFO("created window and buffer successfully");
 }
 
 void window_update(void) {
-  time_start = (f32)GetTickCount();
-
   _input_update();
 
   MSG msg;
@@ -179,9 +181,16 @@ void window_updatelate(void) {
   if (frame_time < time_target)
     Sleep((DWORD)(time_target - frame_time));
 
-  u32 current_time = GetTickCount();
-  time_delta = (current_time - time_last) / 1000.0f;
-  time_last = current_time;
+  LARGE_INTEGER now;
+  QueryPerformanceCounter(&now);
+
+  f64 delta = (f64)(now.QuadPart - qpc_last.QuadPart) / (f64)qpc_freq.QuadPart;
+  qpc_last = now;
+
+  if (delta < 0.0001) delta = 0.0001;
+  if (delta > 0.1) delta = 0.1;
+
+  time_delta = (f32)delta;
 
   //_input_updatelate();
 }
