@@ -12,4 +12,6 @@ example:
 	./bin/$(FILE:.c=.exe)
 
 build:
-	$(CC) $(CFLAGS) $(SRC) -o $(OUT) $(LDFLAGS)
+	$(CC) -c $(CFLAGS) $(SRC) ; \
+	mv *.o bin/ ; \
+	ar rcs bin/nal.lib $(wildcard bin/*.o) 

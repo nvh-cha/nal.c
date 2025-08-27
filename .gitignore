@@ -1,5 +1,6 @@
-bin/nal.exe
 bin/examples/*.exe
+*.o
+*.lib
 compile_commands.json
 generate_compile_commands.py
 .cache
