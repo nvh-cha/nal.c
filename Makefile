@@ -1,14 +1,15 @@
 SRC := $(wildcard src/*.c)
-OUT := ./bin/nal.exe
+FILE := examples/window.c
 
 CC := gcc
 CFLAGS := -Wall -Wextra -std=c99 -Iinclude -Iexternal
 LDFLAGS := -lgdi32 -luser32 -lwinmm
 
-all: build run
+all: build
+
+example:
+	$(CC) $(CFLAGS) $(SRC) $(FILE) -o bin/$(FILE:.c=.exe) $(LDFLAGS) ; \
+	./bin/$(FILE:.c=.exe)
 
 build:
 	$(CC) $(CFLAGS) $(SRC) -o $(OUT) $(LDFLAGS)
-
-run:
-	$(OUT)
