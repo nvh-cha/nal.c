@@ -52,7 +52,19 @@ typedef struct {
 Animation animation_create(char *path, f32 delay, bool repeat);
 void animation_free(Animation *ani);
 
+typedef enum {
+  BLEND_NONE,
+  BLEND_NORMAL,
+  BLEND_ADDITIVE,
+  BLEND_SUBTRACTIVE,
+  BLEND_MULTIPLY,
+  BLEND_SCREEN,
+  BLEND_DARKEN,
+  BLEND_LIGHTEN
+} BlendMode;
+
 void render_changetarget(Texture *render_target);
+void render_changeblending(BlendMode mode);
 void render_clear(Color color);
 
 void render_pixel(vec2 pos, Color color);
