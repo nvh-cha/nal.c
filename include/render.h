@@ -1,7 +1,7 @@
 #pragma once
 
-#include <utils.h>
-#include <core.h>
+#include "utils.h"
+#include "core.h"
 
 typedef u32 Color;
 
