@@ -52,6 +52,15 @@ typedef struct {
 Animation animation_create(char *path, f32 delay, bool repeat);
 void animation_free(Animation *ani);
 
+typedef struct {
+  Spritesheet tileset;
+  vec2u size;
+  i16 *data;
+} Tilemap;
+
+Tilemap tilemap_create(const char *path, Spritesheet tileset);
+void tilemap_free(Tilemap *t);
+
 typedef enum {
   BLEND_NONE,
   BLEND_NORMAL,
@@ -72,3 +81,4 @@ void render_rectangle(vec2 pos, vec2 size, Color color);
 void render_line(vec2 start, vec2 end, Color color);
 void render_texture(Texture image, vec2 pos);
 void render_animation(Animation *ani, vec2 pos);
+void render_tilemap(Tilemap t, vec2 offset);

@@ -72,3 +72,12 @@ typedef struct {
 
 Timer timer_create(f32 time, bool repeat);
 void timer_update(Timer *t);
+
+typedef struct {
+  char *data;
+  size_t len;
+  bool valid;
+} File;
+
+File file_read(const char *path);
+bool file_write(void *buffer, size_t size, const char *path);

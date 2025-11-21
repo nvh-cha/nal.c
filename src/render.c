@@ -2,7 +2,7 @@
 #include <render.h>
 #include "__global__.h"
 
-static Texture *target;
+static Texture *target = NULL;
 static BlendMode blend_mode = BLEND_NORMAL;
 
 Color color_pack(u8 a, u8 r, u8 g, u8 b) {
@@ -168,4 +168,20 @@ void render_animation(Animation *ani, vec2 pos) {
     spritesheet_get(ani->images, ani->i),
     pos
   );
+}
+
+void render_tilemap(Tilemap t, vec2 offset) {
+  u32 tilesize_x = spritesheet_get(t.tileset, 0).size.x;
+  u32 tilesize_y = spritesheet_get(t.tileset, 0).size.y;
+
+  for (u32 i=0;i<t.size.x*t.size.y;i++) {
+    if (t.data[i] != -1) {
+      render_texture(spritesheet_get(t.tileset, t.data[i]),
+        (vec2){
+          offset.x+((u32)i%(u32)t.size.x)*tilesize_x,
+          offset.y+((u32)i/(u32)t.size.y)*tilesize_y
+        }
+      );
+    }
+  }
 }

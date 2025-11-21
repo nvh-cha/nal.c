@@ -167,3 +167,45 @@ Animation animation_create(char *path, f32 delay, bool repeat) {
 void animation_free(Animation *ani) {
   spritesheet_free(ani->images);
 }
+
+Tilemap tilemap_create(const char *path, Spritesheet tileset) {
+  File file = file_read(path);
+  if (!file.valid)
+    FATAL("failed to read tilemap: %s", path);
+  
+  Tilemap res = (Tilemap){
+    .size = (vec2u){0, 0},
+    .tileset = tileset
+  };
+
+  for (u32 i=0;file.data[i] != '\0';i++) {
+    if (file.data[i] == '\n')
+      res.size.y++;
+  }
+  res.size.x = 1;
+  for (u32 i=0;file.data[i] != '\n';i++) {
+    if (file.data[i] == ',')
+      res.size.x++;
+  }
+
+  res.data = malloc(sizeof(i16)*res.size.x*res.size.y);
+  INFO("allocating mem for tilemap: %s; %i tiles in mem", path, res.size.x*res.size.y);
+
+  u32 count = 0;
+  char *token = strtok(file.data, ",\n");
+  while (token != NULL) {
+    res.data[count] = (i16)atoi(token);
+    DEBUG("%i", res.data[count]);
+    count++;
+    token = strtok(NULL, ",\n");
+  }
+
+  return res;
+}
+
+void tilemap_free(Tilemap *t) {
+  DEBUG("freeing tilemap");
+  free(t->data);
+  spritesheet_free(t->tileset);
+  t = NULL;
+}

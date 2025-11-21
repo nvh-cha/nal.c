@@ -86,3 +86,86 @@ void timer_update(Timer *t) {
       t->i = t->time;
   }
 }
+
+#define _IO_READ_CHUNK 2097152
+#define _IO_READ_ERROR_GEN "error reading file: %s\n, errno: %d\n"
+#define _IO_READ_ERROR_MEM "not enough memory to read the file: %s\n"
+
+File file_read(const char *path) {
+	File file = {.valid=0};
+
+	FILE *fp = fopen(path, "rb");
+	if (!fp || ferror(fp)) {
+		ERRORL(_IO_READ_ERROR_GEN, path, errno);
+    return file;
+  }
+
+	char *data = NULL;
+	char *tmp;
+	usize used = 0;
+	usize size = 0;
+	usize n;
+
+	while (1) {
+		if (used + _IO_READ_CHUNK+1 > size) {
+			size = used+_IO_READ_CHUNK+1;
+
+			if (size <= used) {
+				free(data);
+				ERRORL("input file too large: %s\n", path);
+        return file;
+			}
+
+			tmp = realloc(data, size);
+			if (!tmp) {
+				free(data);
+				ERRORL(_IO_READ_ERROR_MEM, path);
+        return file;
+			}
+			data = tmp;
+		}
+
+		n = fread(data+used, 1, _IO_READ_CHUNK, fp);
+		if (n == 0)
+			break;
+
+		used+=n;
+	}
+	
+	if (ferror(fp)) {
+		free(data);
+		ERRORL(_IO_READ_ERROR_GEN, path, errno);
+    return file;
+	}
+	
+	tmp = realloc(data, used+1);
+	if (!tmp) {
+		free(data);
+		ERRORL(_IO_READ_ERROR_MEM, path);
+    return file;
+	}
+	data = tmp;
+	data[used] = 0;
+
+	file.data = data;
+	file.len = used;
+	file.valid = 1;
+
+	return file;
+}
+
+bool file_write(void *buffer, usize size, const char *path) {
+	FILE *fp = fopen(path, "wb");
+	if (!fp || ferror(fp)) {
+		ERRORL("cannot write file : %s\n", path);
+    return 1;
+  }
+	usize chunks_written = fwrite(buffer, size, 1, fp);
+	fclose(fp);
+	if (chunks_written != 1) {
+		ERRORL("write error: expected 1 chunk got %zu\n", chunks_written);
+    return 1;
+  }
+
+	return 0;
+}
