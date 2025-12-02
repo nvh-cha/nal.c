@@ -54,8 +54,8 @@ void animation_free(Animation *ani);
 
 typedef struct {
   Spritesheet tileset;
-  vec2u size;
-  i16 *data;
+  void *data;
+  u32 len;
 } Tilemap;
 
 Tilemap tilemap_create(const char *path, Spritesheet tileset);

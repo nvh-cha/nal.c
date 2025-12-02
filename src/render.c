@@ -170,18 +170,18 @@ void render_animation(Animation *ani, vec2 pos) {
   );
 }
 
-void render_tilemap(Tilemap t, vec2 offset) {
-  u32 tilesize_x = spritesheet_get(t.tileset, 0).size.x;
-  u32 tilesize_y = spritesheet_get(t.tileset, 0).size.y;
+struct _Tile {
+  vec2 pos;
+  u32 type;
+};
 
-  for (u32 i=0;i<t.size.x*t.size.y;i++) {
-    if (t.data[i] != -1) {
-      render_texture(spritesheet_get(t.tileset, t.data[i]),
-        (vec2){
-          offset.x+((u32)i%(u32)t.size.x)*tilesize_x,
-          offset.y+((u32)i/(u32)t.size.y)*tilesize_y
-        }
-      );
-    }
+void render_tilemap(Tilemap t, vec2 offset) {
+  for (u32 i=0;i<t.len;i++) {
+    struct _Tile tile = ((struct _Tile*)t.data)[i];
+
+    render_texture(
+      spritesheet_get(t.tileset, tile.type),
+      vec2f_add(offset, tile.pos)
+    );
   }
 }

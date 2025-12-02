@@ -168,38 +168,68 @@ void animation_free(Animation *ani) {
   spritesheet_free(ani->images);
 }
 
+typedef struct {
+  vec2 pos;
+  u32 type;
+} _Tile;
+
 Tilemap tilemap_create(const char *path, Spritesheet tileset) {
   File file = file_read(path);
   if (!file.valid)
     FATAL("failed to read tilemap: %s", path);
   
   Tilemap res = (Tilemap){
-    .size = (vec2u){0, 0},
     .tileset = tileset
   };
 
+  vec2u size = {0};
+
   for (u32 i=0;file.data[i] != '\0';i++) {
     if (file.data[i] == '\n')
-      res.size.y++;
+      size.y++;
   }
-  res.size.x = 1;
+  size.x = 1;
   for (u32 i=0;file.data[i] != '\n';i++) {
     if (file.data[i] == ',')
-      res.size.x++;
+      size.x++;
+  }
+  
+  char *data_copy = strdup(file.data);
+  char *token = strtok(data_copy, ",\n");
+  while (token != NULL) {
+    if ((i16)atoi(token) != -1)
+      res.len++;
+    token = strtok(NULL, ",\n");
   }
 
-  res.data = malloc(sizeof(i16)*res.size.x*res.size.y);
-  INFO("allocating mem for tilemap: %s; %i tiles in mem", path, res.size.x*res.size.y);
 
+  res.data = malloc(sizeof(_Tile)*res.len);
+  INFO("allocating mem for tilemap, len: %i", res.len);
+
+  vec2u tilesize = (vec2u){
+    spritesheet_get(res.tileset, 0).size.x,
+    spritesheet_get(res.tileset, 0).size.y
+  };
+
+  u32 i = 0;
   u32 count = 0;
-  char *token = strtok(file.data, ",\n");
+  token = strtok(file.data, ",\n");
   while (token != NULL) {
-    res.data[count] = (i16)atoi(token);
-    DEBUG("%i", res.data[count]);
+    if ((i16)atoi(token) != -1) {
+      ((_Tile*)res.data)[i] = (_Tile){
+        .pos = (vec2){
+          ((u32)count%(u32)size.x)*tilesize.x,
+          ((u32)count/(u32)size.y)*tilesize.y,
+        },
+        .type = (u32)atoi(token)
+      };
+      i++;
+    }
     count++;
     token = strtok(NULL, ",\n");
   }
 
+  free(file.data);
   return res;
 }
 
