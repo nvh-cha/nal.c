@@ -66,6 +66,95 @@ u8 arraylist_remove(ArrayList *arr, usize index) {
 	return 0;
 }
 
+static unsigned long hash_str(const char *str) {
+  unsigned long hash = 5381;
+  int c;
+
+  while ((c = *str++))
+    hash = ((hash << 5) + hash) + c;
+
+  return hash;
+}
+
+HashMap hashmap_create(u32 capacity) {
+  HashMap res = {0};
+  res.capacity = capacity;
+
+  res.entries = malloc(sizeof(HashEntry*)*capacity);
+  memset(res.entries, 0, capacity * sizeof(HashEntry*));
+
+  return res;
+}
+void hashmap_put(HashMap *map, const char *key, void *value) {
+  usize i = hash_str(key) % map->capacity;
+
+  HashEntry *e = map->entries[i];
+
+  while (e != NULL) {
+    if (!strcmp(e->key, key)) {
+      e->value = value;
+      return;
+    }
+    e = e->next;
+  }
+
+  HashEntry *new = malloc(sizeof(HashEntry));
+  new->key = strdup(key);
+  new->value = value;
+  new->next = map->entries[i];
+
+  map->entries[i] = new;
+  map->size++;
+}
+void *hashmap_get(HashMap *map, const char *key) {
+  u32 index = hash_str(key) % map->capacity;
+  HashEntry *entry = map->entries[index];
+
+  while (entry) {
+    if (!strcmp(key, entry->key))
+      return entry->value;
+    entry = entry->next;
+  }
+  return NULL;
+}
+void hashmap_remove(HashMap *map, const char *key) {
+  u32 index = hash_str(key) % map->capacity;
+  HashEntry *entry = map->entries[index];
+  HashEntry *prev = NULL;
+
+  while (entry) {
+    if (!strcmp(key, entry->key)) {
+      if (prev)
+        prev->next = entry->next;
+      else
+        map->entries[index] = entry->next;
+
+      free(entry->key);
+      free(entry);
+      map->size--;
+      return;
+    }
+
+    prev = entry;
+    entry = entry->next;
+  } 
+}
+void hashmap_free(HashMap *map) {
+  for (u32 i = 0; i < map->capacity; i++) {
+    HashEntry *entry = map->entries[i];
+    while (entry) {
+      HashEntry *next = entry->next;
+      free(entry->key);
+      free(entry);
+      entry = next;
+    }
+  }
+  free(map->entries);
+  map->entries = NULL;
+  map->size = 0;
+  map->capacity = 0;
+}
+
 Timer timer_create(f32 time, bool repeat) {
   Timer res = (Timer) {
     .time = time,

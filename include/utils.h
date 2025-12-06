@@ -62,6 +62,24 @@ usize arraylist_append(ArrayList *arr, void *item);
 void *arraylist_get(ArrayList *arr, usize index);
 u8 arraylist_remove(ArrayList *arr, usize index);
 
+typedef struct HashEntry {
+  char *key;
+  void *value;
+  struct HashEntry *next;
+} HashEntry;
+
+typedef struct {
+  u32 capacity;
+  u32 size;
+  HashEntry **entries;
+} HashMap;
+
+HashMap hashmap_create(u32 capacity);
+void hashmap_put(HashMap *map, const char *key, void *value);
+void *hashmap_get(HashMap *map, const char *key);
+void hashmap_remove(HashMap *map, const char *key);
+void hashmap_free(HashMap *map);
+
 typedef struct {
   f32 i;
   bool end;
